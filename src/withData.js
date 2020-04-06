@@ -35,29 +35,29 @@ export default apolloConfig => {
       WithApollo.displayName = `withApollo(${displayName})`
     }
 
-    if (ssr || PageComponent.getInitialProps) {
-      WithApollo.getInitialProps = async ctx => {
-        const { AppTree } = ctx
+    if (ssr || PageComponent.getServerSideProps) {
+      WithApollo.getServerSideProps = async context => {
+        const { AppTree } = context
 
-        // Initialize ApolloClient, add it to the ctx object so
+        // Initialize ApolloClient, add it to the context object so
         // we can use it in `PageComponent.getInitialProp`.
-        const apolloClient = (ctx.apolloClient = initApolloClient(
+        const apolloClient = (context.apolloClient = initApolloClient(
           apolloConfig,
           null,
-          ctx
+          context
         ))
 
-        // Run wrapped getInitialProps methods
+        // Run wrapped getServerSideProps methods
         let pageProps = {}
-        if (PageComponent.getInitialProps) {
-          pageProps = await PageComponent.getInitialProps(ctx)
+        if (PageComponent.getServerSideProps) {
+          pageProps = await PageComponent.getServerSideProps(context)
         }
 
         // Only on the server:
         if (typeof window === 'undefined') {
           // When redirecting, the response is finished.
           // No point in continuing to render
-          if (ctx.res && ctx.res.finished) {
+          if (context.res && context.res.finished) {
             return pageProps
           }
 
@@ -106,9 +106,9 @@ export default apolloConfig => {
  * Creates or reuses apollo client in the browser.
  * @param  {Object} initialState
  */
-function initApolloClient(apolloConfig, initialState = {}, ctx) {
+function initApolloClient(apolloConfig, initialState = {}, context) {
   if (isFunction(apolloConfig)) {
-    apolloConfig = apolloConfig(ctx)
+    apolloConfig = apolloConfig(context)
   }
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
