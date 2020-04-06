@@ -117,13 +117,13 @@ var _default = function _default(apolloConfig) {
       WithApollo.displayName = 'withApollo('.concat(displayName, ')')
     }
 
-    if (ssr || PageComponent.getInitialProps) {
-      WithApollo.getInitialProps =
+    if (ssr || PageComponent.getServerSideProps) {
+      WithApollo.getServerSideProps =
         /*#__PURE__*/
         (function() {
           var _ref3 = (0, _asyncToGenerator2['default'])(
             /*#__PURE__*/
-            _regenerator['default'].mark(function _callee(ctx) {
+            _regenerator['default'].mark(function _callee(context) {
               var AppTree,
                 apolloClient,
                 pageProps,
@@ -136,24 +136,24 @@ var _default = function _default(apolloConfig) {
                   while (1) {
                     switch ((_context.prev = _context.next)) {
                       case 0:
-                        AppTree = ctx.AppTree // Initialize ApolloClient, add it to the ctx object so
+                        AppTree = context.AppTree // Initialize ApolloClient, add it to the context object so
                         // we can use it in `PageComponent.getInitialProp`.
 
-                        apolloClient = ctx.apolloClient = initApolloClient(
+                        apolloClient = context.apolloClient = initApolloClient(
                           apolloConfig,
                           null,
-                          ctx
-                        ) // Run wrapped getInitialProps methods
+                          context
+                        ) // Run wrapped getServerSideProps methods
 
                         pageProps = {}
 
-                        if (!PageComponent.getInitialProps) {
+                        if (!PageComponent.getServerSideProps) {
                           _context.next = 7
                           break
                         }
 
                         _context.next = 6
-                        return PageComponent.getInitialProps(ctx)
+                        return PageComponent.getServerSideProps(context)
 
                       case 6:
                         pageProps = _context.sent
@@ -164,7 +164,7 @@ var _default = function _default(apolloConfig) {
                           break
                         }
 
-                        if (!(ctx.res && ctx.res.finished)) {
+                        if (!(context.res && context.res.finished)) {
                           _context.next = 10
                           break
                         }
@@ -261,10 +261,10 @@ exports['default'] = _default
 function initApolloClient(apolloConfig) {
   var initialState =
     arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
-  var ctx = arguments.length > 2 ? arguments[2] : undefined
+  var context = arguments.length > 2 ? arguments[2] : undefined
 
   if ((0, _lodash.isFunction)(apolloConfig)) {
-    apolloConfig = apolloConfig(ctx)
+    apolloConfig = apolloConfig(context)
   } // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
 

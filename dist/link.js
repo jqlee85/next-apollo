@@ -53,7 +53,7 @@ var _router = _interopRequireDefault(require('next/router'))
 
 var _reactSsr = require('@apollo/react-ssr')
 
-var _utils = require('next-server/dist/lib/utils')
+var _utils = require('next/dist/server/lib/utils')
 
 var _propTypesExact = _interopRequireDefault(require('prop-types-exact'))
 
